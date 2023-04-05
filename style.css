@@ -1,0 +1,72 @@
+html{
+    font-size: 16px;
+}
+body {
+    box-sizing: border-box;
+
+    font-family: 'Roboto', sans-serif;
+    background-color: #EEF9BF;
+}
+.page-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+}
+.title{
+    font-weight: 700;
+    font-size: 3.5rem;
+    color: #75B79E;
+    text-align: center;
+    
+    margin-top: 40px;
+}
+.cards-display{
+    width: 88.55%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+.cards-line{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 35px;
+}
+
+.card{
+    background-color: #A7E9AF;
+    border: 1px solid #99CEA8;
+    border-radius: 5px;
+
+    width: 12%;
+    height: 146px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+img{
+    width: 85.47%;
+    height: 68.49%;
+}
+@media (max-width: 768px){
+    .title{
+        font-size: 2.25rem;
+        margin-bottom: 35px;
+    }
+    .cards-display{
+        align-items: center;
+    }
+    .cards-line {
+        flex-direction: column;
+        align-items: center;
+        width: 117px;
+        margin: 0;
+    }
+    .card{
+        width: 100%;
+        margin-bottom: 35px;
+    }
+}
