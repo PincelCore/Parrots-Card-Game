@@ -57,12 +57,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     for (i = 0; i < deck.length; i++) {
         line.innerHTML += `
-            <div class="card">
+            <div class="card" data-test="card">
                  <div class="face front">
-                    <img src="${deck[i].frontImage}" alt="${deck[i].name}"/>
+                    <img src="${deck[i].frontImage}" alt="${deck[i].name}" data-test="face-up-image"/>
                 </div>
                 <div class="face back">
-                    <img src="${deck[i].backImage}" alt="back card"/>
+                    <img src="${deck[i].backImage}" alt="back card" data-test="face-down-image"/>
                 </div>
             </div>
             `;
@@ -74,40 +74,54 @@ document.addEventListener('DOMContentLoaded', function() {
     const cards = document.querySelectorAll('.card');
     let flippedCard = false;
     let firstCard, secondCard;
-    let Attemps = 0;
-    
-    cards.forEach(card => {
-      card.addEventListener('click', function() {
-        if (!flippedCard) {
-          flippedCard = true;
-          firstCard = this;
-          firstCard.classList.add('flipped');
+    let attemps = 0;
+
+    function cardClickHandler() {
+      attemps++;
+      if (this.classList.contains('flipped')) {
+        return;
+      }
+      this.classList.add('flipped');
+      if (!flippedCard) {
+        flippedCard = true;
+        firstCard = this;
+      } else {
+        secondCard = this;
+        if (firstCard.querySelector('.front img').src === secondCard.querySelector('.front img').src) {
+          firstCard.removeEventListener('click', cardClickHandler);
+          secondCard.removeEventListener('click', cardClickHandler);
+          firstCard = null;
+          secondCard = null;
+          verificarFimDoJogo();
         } else {
-          secondCard = this;
-          secondCard.classList.add('flipped');
-    
-          if (firstCard.querySelector('.front img').alt === secondCard.querySelector('.front img').alt) {
-            firstCard.removeEventListener('click', flipCard);
-            secondCard.removeEventListener('click', flipCard);
-          } else {
-            setTimeout(() => {
-              firstCard.classList.remove('flipped');
-              secondCard.classList.remove('flipped');
-            }, 1000);
-          }
-          flippedCard = false;
+          document.body.classList.add('no-click');
+          setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+            firstCard = null;
+            secondCard = null;
+            document.body.classList.remove('no-click');
+          }, 1000);
         }
-        Attemps++;
-      });
-    });
-    
-    //Fim do jogo
-    function verificarFimDoJogo() {
-      if (deck.every(card => card.isFlipped)) {
-        alert(`Você ganhou em ${Attemps} jogadas!`);
+        flippedCard = false;
       }
     }
-    
+
+    cards.forEach(card => {
+      card.addEventListener('click', cardClickHandler);
+    });
+
+    //Fim do jogo
+    function verificarFimDoJogo() {
+      const cards = document.querySelectorAll('.card');
+      const allFlipped = [...cards].every(card => card.classList.contains('flipped'));
+      if (allFlipped) {
+        setTimeout(() => {
+          alert(`Você ganhou em ${attemps} jogadas!`);
+        }, 400);
+      }
+    }
+      
 
 });
   
