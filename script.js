@@ -13,6 +13,17 @@ document.addEventListener('DOMContentLoaded', function() {
         Ncards = Number(prompt('Você é burro? Escolha um par entre 4 e 14 pra jogar!'));
     }
 
+    //Inicia o jogo com cronômetro
+    let IntervalId;
+    let time = 0;
+    const timer = document.getElementById('time');
+
+    IntervalId = setInterval(() => {
+    time++;
+    timer.textContent = time;
+    }, 1000);
+    
+
     //Selecionar as imagens da frente das cartas
     const cardImages = [
         { name: 'bobrossparrot', src: 'media/bobrossparrot.gif' },
@@ -92,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
           secondCard.removeEventListener('click', cardClickHandler);
           firstCard = null;
           secondCard = null;
-          verificarFimDoJogo();
+          endGame();
         } else {
           document.body.classList.add('no-click');
           setTimeout(() => {
@@ -112,13 +123,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     //Fim do jogo
-    function verificarFimDoJogo() {
+    function endGame() {
       const cards = document.querySelectorAll('.card');
       const allFlipped = [...cards].every(card => card.classList.contains('flipped'));
       if (allFlipped) {
         setTimeout(() => {
-          alert(`Você ganhou em ${attemps} jogadas!`);
+          alert(`Você ganhou em ${attemps} jogadas! A duração do jogo foi de ${time} segundos!` );
+          
+          let answer = prompt("Você gostaria de reiniciar a partida? (sim ou não)");
+          while(answer !== "sim" && answer !== "não"){
+            answer = prompt("Você é burro? Apenas digite: sim ou não");
+          }
+
+          if (answer === "sim"){
+            location.reload();
+          }
         }, 400);
+        clearInterval(IntervalId);
       }
     }
       
